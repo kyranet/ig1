@@ -124,3 +124,25 @@ void RectanguloRGB::render(Camera const& cam) {
 		glColor3d(0.0, 0.0, 1.0);
 	}
 }
+
+//-------------------------------------------------------------------------
+
+//clase rectangulo
+Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h) : Entity() {
+	mesh = Mesh::generaEstrella3D(re, np, h);
+}
+
+Estrella3D::~Estrella3D() {
+	delete mesh;
+	mesh = nullptr;
+}
+
+void Estrella3D::render(Camera const& cam) {
+	if (mesh != nullptr) {
+		uploadMvM(cam.getViewMat());
+		glLineWidth(2);
+		mesh->render();
+		glLineWidth(1);
+		glColor3d(0.0, 0.0, 1.0);
+	}
+}

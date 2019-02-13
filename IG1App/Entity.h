@@ -81,4 +81,14 @@ public:
 	~RectanguloRGB();
 	virtual void render(Camera const& cam);
 };
+
+//-------------------------------------------------------------------------
+
+class Estrella3D : public Entity {
+
+public:
+	Estrella3D(GLdouble re, GLdouble np, GLdouble h);
+	~Estrella3D();
+	virtual void render(Camera const& cam);
+};
 #endif //_H_Entities_H_

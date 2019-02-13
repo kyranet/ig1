@@ -22,7 +22,8 @@ void Scene::init()
   // grObjects.push_back(new Poliespiral(160, 1, 1, 50));
   // grObjects.push_back(new Dragon(3000));
   // grObjects.push_back(new TrianguloRGB(100));
-  grObjects.push_back(new RectanguloRGB(200, 100));
+  // grObjects.push_back(new RectanguloRGB(200, 100));
+  grObjects.push_back(new Estrella3D(30, 7, 20));
 }
 //-------------------------------------------------------------------------
 

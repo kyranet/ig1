@@ -18,6 +18,7 @@ public:
 	static Mesh* generaTrianguloRGB(GLdouble r);
 	static Mesh* generaRectanguloRGB(GLdouble w, GLdouble h);
 	static Mesh* generaRectangulo(GLdouble w, GLdouble h);
+	static Mesh* generaEstrella3D(GLdouble re, GLdouble np, GLdouble h);
  
 	Mesh(void) { };
 	~Mesh(void);

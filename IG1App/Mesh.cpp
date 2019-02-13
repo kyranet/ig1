@@ -169,3 +169,36 @@ Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h) {
 	Mesh* m = generaRectangulo(w, h);
 	return m;
 }
+
+Mesh* Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
+{
+	Mesh* m = new Mesh();
+	m->primitive = GL_TRIANGLE_FAN;
+	m->numVertices = 2 * np + 2;
+	m->vertices = new dvec3[m->numVertices];
+	m->vertices[0] = { 0, 0, 0 };
+
+	GLdouble hh = h / 2;
+	GLdouble ri = re / 2;
+	GLdouble x, z, he;
+	GLdouble angle = 0;
+	GLdouble angleIncr = 360 / (m->numVertices - 2);
+	for (GLuint i = 1; i < m->numVertices; i++)
+	{
+		if (i % 2 == 1)
+		{
+			x = re * cos(radians(angle + angleIncr * i));
+			z = re * sin(radians(angle + angleIncr * i));
+			he = h;
+		}
+		else
+		{
+			x = ri * cos(radians(angle + angleIncr * i));
+			z = ri * sin(radians(angle + angleIncr * i));
+			he = hh;
+		}
+		m->vertices[i] = { x, he, z };
+	}
+
+	return m;
+}
