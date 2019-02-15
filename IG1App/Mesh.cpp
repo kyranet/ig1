@@ -182,7 +182,7 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
 	GLdouble ri = re / 2;
 	GLdouble x, z, he;
 	GLdouble angle = 0;
-	GLdouble angleIncr = 360 / (m->numVertices - 2);
+	GLdouble angleIncr = 360 / (np * 2);
 	for (GLuint i = 1; i < m->numVertices; i++)
 	{
 		if (i % 2 == 1)
@@ -199,6 +199,28 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
 		}
 		m->vertices[i] = { x, he, z };
 	}
+
+	return m;
+}
+
+Mesh* Mesh::generaContCubo(GLdouble l)
+{
+	Mesh* m = new Mesh();
+	m->primitive = GL_TRIANGLE_STRIP;
+	m->numVertices = 10;
+
+	GLdouble h = l / 2;
+	m->vertices = new dvec3[m->numVertices];
+	m->vertices[0] = { h, h, h };
+	m->vertices[1] = { h, -h, h };
+	m->vertices[2] = { -h, h, h };
+	m->vertices[3] = { -h, -h, h };
+	m->vertices[4] = { -h, h, -h };
+	m->vertices[5] = { -h, -h, -h };
+	m->vertices[6] = { h, h, -h };
+	m->vertices[7] = { h, -h, -h };
+	m->vertices[8] = m->vertices[0];
+	m->vertices[9] = m->vertices[1];
 
 	return m;
 }

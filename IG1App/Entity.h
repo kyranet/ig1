@@ -91,4 +91,14 @@ public:
 	~Estrella3D();
 	virtual void render(Camera const& cam);
 };
+
+//-------------------------------------------------------------------------
+
+class Caja : public Entity {
+
+public:
+	Caja(GLdouble l);
+	~Caja();
+	virtual void render(Camera const& cam);
+};
 #endif //_H_Entities_H_
