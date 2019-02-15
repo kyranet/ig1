@@ -6,6 +6,5 @@
 *.obj
 *.idb
 
-Drakhtar/Debug/
 
-IG1App/Debug/
+Debug/
