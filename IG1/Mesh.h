@@ -11,7 +11,6 @@ class Mesh
 {
 public:
 	static Mesh* createRGBAxes(GLdouble l); // creates a new 3D RGB axes mesh
-	//ejercicio P1
 	static Mesh* generaPoliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrAng, GLdouble ladoIni, GLdouble incrLado, GLuint numVert);
 	static Mesh* generaDragon(GLuint numVert);
 	static Mesh* generaTriangulo(GLdouble r);

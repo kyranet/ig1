@@ -188,10 +188,14 @@ void Estrella3D::render(Camera const& cam)
 	if (mesh != nullptr)
 	{
 		uploadMvM(cam.getViewMat());
+		glColor3d(0.0, 0.0, 1.0);
 		glLineWidth(2);
 		mesh->render();
-		glLineWidth(1);
+		modelMat = rotate(modelMat, radians(180.0), dvec3(0, 0, 1));
+		uploadMvM(cam.getViewMat());
 		glColor3d(0.0, 0.0, 1.0);
+		glLineWidth(2);
+		mesh->render();
 	}
 }
 
