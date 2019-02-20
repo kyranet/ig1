@@ -21,10 +21,11 @@ void Scene::init()
   //solo acepta double por eso .0
   // grObjects.push_back(new Poliespiral(160, 1, 1, 50));
   // grObjects.push_back(new Dragon(3000));
-  // grObjects.push_back(new TrianguloRGB(100));
-  // grObjects.push_back(new RectanguloRGB(200, 100));
-  grObjects.push_back(new Estrella3D(30, 5, 20));
-  // grObjects.push_back(new Caja(40));
+  //grObjects.push_back(new TrianguloRGB(100));
+  
+  grObjects.push_back(new RectanguloRGB(200, 100));
+  // grObjects.push_back(new Estrella3D(30, 5, 20));
+  //grObjects.push_back(new Caja(40));
 }
 //-------------------------------------------------------------------------
 

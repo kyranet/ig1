@@ -158,15 +158,33 @@ Mesh* Mesh::generaTrianguloRGB(GLdouble r) {
 Mesh* Mesh::generaRectangulo(GLdouble w, GLdouble h) {
 	Mesh* m = new Mesh();
 	m->primitive = GL_TRIANGLE_STRIP;
-	GLuint numVert = 4;
+	m->numVertices = 4;
+	m->vertices = new dvec3[m->numVertices];
 
-
-
+	GLdouble hw = w / 2;
+	GLdouble hh = h / 2;
+	m->vertices[0] = { -hw, hh, 0 };
+	m->vertices[1] = { -hw, -hh, 0};
+	m->vertices[2] = { hw,hh , 0 };
+	m->vertices[3] = { hw, -hh, 0};
+	
 	return m;
 }
 
 Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h) {
 	Mesh* m = generaRectangulo(w, h);
+
+	m->colors = new dvec4[m->numVertices];
+	// X axis color: red  ( Alpha = 1 : fully opaque)
+	m->colors[0] = dvec4(0.5, 0.5, 0.0, 1.0);
+	// Y axis color: green
+	m->colors[1] = dvec4(0.0, 0.5, 0.5, 1.0);
+	// Z axis color: blue
+	m->colors[2] = dvec4(0.5, 0.0, 0.5, 1.0);
+
+	m->colors[3] = dvec4(0.5, 0.0, 0.0, 1.0);
+
+
 	return m;
 }
 

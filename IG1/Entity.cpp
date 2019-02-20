@@ -146,6 +146,7 @@ RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
 	: Entity()
 {
 	mesh = Mesh::generaRectanguloRGB(w, h);
+	modelMat = rotate(modelMat, radians(-25.0), dvec3(1, 0, 0));
 }
 
 RectanguloRGB::~RectanguloRGB()
