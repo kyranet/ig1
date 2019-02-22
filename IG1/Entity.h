@@ -22,6 +22,8 @@ public:
 	glm::dmat4 const& getModelMat() const { return modelMat; };
 
 	void setModelMat(glm::dmat4 const& aMat) { modelMat = aMat; }
+
+	virtual void update();
   
 protected:
 
@@ -100,5 +102,24 @@ public:
 	Caja(GLdouble l);
 	~Caja();
 	virtual void render(Camera const& cam);
+};
+
+
+class TrianguloAnimado : public Entity {
+
+protected:
+	GLdouble ang_;
+	GLdouble beta_;
+
+
+public:
+	TrianguloAnimado(GLdouble r);
+	~TrianguloAnimado();
+	
+	virtual void render(Camera const& cam);
+	virtual void update() {
+		ang_++;
+	}
+
 };
 #endif //_H_Entities_H_

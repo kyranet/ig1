@@ -14,6 +14,10 @@ void Entity::uploadMvM(dmat4 const& modelViewMat) const
 	glLoadMatrixd(value_ptr(aMat));
 }
 
+void Entity::update() {
+
+}
+
 //  _______ __               ______ _______ ______ 
 // |    ___|__|.-----.-----.|   __ \     __|   __ \
 // |    ___|  ||  -__|__ --||      <    |  |   __ <
@@ -136,6 +140,10 @@ void TrianguloRGB::render(Camera const& cam)
 	}
 }
 
+/*Modifica el método render en la clase TrianguloAnimado de forma que actualice su
+matriz de modelado para desplazarse describiendo una circunferencia a la vez que gira
+sobre su centro. Añade atributos para guardar los ángulos de giro. Redefine el método
+update para actualizar los ángulos. */
 //  ______              __                            __        
 // |   __ \.-----.----.|  |_.---.-.-----.-----.--.--.|  |.-----.
 // |      <|  -__|  __||   _|  _  |     |  _  |  |  ||  ||  _  |
@@ -226,6 +234,35 @@ void Caja::render(Camera const& cam)
 		glLineWidth(2);
 		mesh->render();
 		glLineWidth(1);
+		glColor3d(0.0, 0.0, 1.0);
+	}
+}
+
+
+//Animaciones
+TrianguloAnimado::TrianguloAnimado(GLdouble r) {
+
+	mesh = Mesh::generaTrianguloRGB(r);
+}
+
+TrianguloAnimado::~TrianguloAnimado()
+{
+	delete mesh;
+	mesh = nullptr;
+}
+
+void TrianguloAnimado::render(Camera const& cam)
+{
+	if (mesh != nullptr)
+	{
+		uploadMvM(cam.getViewMat());
+		glPointSize(2);
+
+		dmat4 modelMat_(1.0);//= getModelMat();
+		modelMat_ = translate(modelMat_, { 0.0, 2.0, 0.0 });
+		modelMat = rotate(modelMat_, radians(ang_), { 0.0, 0.0, 1.0 });
+
+		mesh->render();
 		glColor3d(0.0, 0.0, 1.0);
 	}
 }
