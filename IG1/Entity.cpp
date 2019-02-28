@@ -140,10 +140,7 @@ void TrianguloRGB::render(Camera const& cam)
 	}
 }
 
-/*Modifica el método render en la clase TrianguloAnimado de forma que actualice su
-matriz de modelado para desplazarse describiendo una circunferencia a la vez que gira
-sobre su centro. Añade atributos para guardar los ángulos de giro. Redefine el método
-update para actualizar los ángulos. */
+
 //  ______              __                            __        
 // |   __ \.-----.----.|  |_.---.-.-----.-----.--.--.|  |.-----.
 // |      <|  -__|  __||   _|  _  |     |  _  |  |  ||  ||  _  |
@@ -154,7 +151,7 @@ RectanguloRGB::RectanguloRGB(GLdouble w, GLdouble h)
 	: Entity()
 {
 	mesh = Mesh::generaRectanguloRGB(w, h);
-	modelMat = rotate(modelMat, radians(-25.0), dvec3(1, 0, 0));
+	modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
 }
 
 RectanguloRGB::~RectanguloRGB()
@@ -184,6 +181,9 @@ Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h)
 	: Entity()
 {
 	mesh = Mesh::generaEstrella3D(re, np, h);
+	modelMat = translate(modelMat, dvec3(-h , re * 2.5 , -1 * h));
+	modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
+	
 }
 
 Estrella3D::~Estrella3D()
@@ -218,6 +218,8 @@ Caja::Caja(GLdouble l)
 	: Entity()
 {
 	mesh = Mesh::generaContCubo(l);
+	modelMat = translate(modelMat, dvec3(-l/2, l/2, -l/2));
+	
 }
 
 Caja::~Caja()
@@ -251,18 +253,71 @@ TrianguloAnimado::~TrianguloAnimado()
 	mesh = nullptr;
 }
 
+void TrianguloAnimado::update() {
+	alfa_++;
+	beta_ += 0.1;
+}
+
 void TrianguloAnimado::render(Camera const& cam)
 {
+
 	if (mesh != nullptr)
 	{
 		uploadMvM(cam.getViewMat());
 		glPointSize(2);
 
-		dmat4 modelMat_(1.0);//= getModelMat();
-		modelMat_ = translate(modelMat_, { 0.0, 2.0, 0.0 });
-		modelMat = rotate(modelMat_, radians(ang_), { 0.0, 0.0, 1.0 });
+		dmat4 modelMatId(1.0);
+
+		modelMatId = translate(modelMatId, dvec3(100 * sin(beta_), 100 * cos(beta_), 0.0));
+		modelMat = rotate(modelMatId, radians(alfa_), { 0.0, 0.0, 1.0 });
+	
 
 		mesh->render();
 		glColor3d(0.0, 0.0, 1.0);
+
+		modelMatId = translate(modelMatId, dvec3(-100 * cos(beta_), -100 * cos(beta_), 0.0));
 	}
 }
+
+
+//Animaciones
+EstrellaAnimada::EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h) {
+
+	mesh = Mesh::generaEstrella3D(re, np, h);
+	modelMat = translate(modelMat, dvec3(-h, re * 2.5, -1 * h));
+	modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
+}
+
+EstrellaAnimada::~EstrellaAnimada()
+{
+	delete mesh;
+	mesh = nullptr;
+}
+
+
+void EstrellaAnimada::update() {
+	alfa_++;
+}
+void EstrellaAnimada::render(Camera const& cam)
+{
+
+	if (mesh != nullptr)
+	{
+
+		uploadMvM(cam.getViewMat());
+		glColor3d(0.0, 0.0, 1.0);
+		glLineWidth(2);
+		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
+		mesh->render();
+
+		modelMat = rotate(modelMat, radians(180.0), dvec3(0, 0, 1));
+
+		uploadMvM(cam.getViewMat());
+		glColor3d(0.0, 0.0, 1.0);
+		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
+		glLineWidth(2);
+		mesh->render();
+		
+	}
+}
+

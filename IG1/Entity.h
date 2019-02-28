@@ -108,8 +108,8 @@ public:
 class TrianguloAnimado : public Entity {
 
 protected:
-	GLdouble ang_;
-	GLdouble beta_;
+	GLdouble alfa_;
+	GLdouble beta_ = 0.25;
 
 
 public:
@@ -117,9 +117,23 @@ public:
 	~TrianguloAnimado();
 	
 	virtual void render(Camera const& cam);
-	virtual void update() {
-		ang_++;
-	}
+	virtual void update();
 
 };
+
+//-------------------------------------------------------------------------
+
+class EstrellaAnimada : public Entity {
+
+public:
+	EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h);
+	~EstrellaAnimada();
+	virtual void render(Camera const& cam);
+	virtual void update();
+
+private:
+	GLdouble alfa_;
+	Mesh* mesh2_ = nullptr;
+};
+
 #endif //_H_Entities_H_
