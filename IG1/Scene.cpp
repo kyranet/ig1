@@ -12,6 +12,8 @@ void Scene::init(bool bidimensional)
 	glClearColor(1.0, 1.0, 1.0, 1.0);  // background color (alpha=1 -> opaque)
 	glEnable(GL_DEPTH_TEST);  // enable Depth test 
 
+	grObjects.push_back(new EjesRGB(200.0));
+
 	if (bidimensional)
 	{
 		/*******************_Animacion 2D_**********************/
@@ -20,7 +22,6 @@ void Scene::init(bool bidimensional)
 		/*******************_            _**********************/
 
 		// Graphics objects (entities) of the scene
-		grObjects.push_back(new EjesRGB(200.0));
 		grObjects.push_back(new Poliespiral(160, 1, 1, 50));
 
 
@@ -42,7 +43,7 @@ void Scene::init(bool bidimensional)
 		/*******************_ANIMACION 3D_**********************/
 		EstrellaAnimada* estrellaAnm_ = new EstrellaAnimada(30, 5, 20);
 
-    estrellaAnm_->me = translate(estrellaAnm_->me, dvec3(-30, 5 * 2.5, -1 * 20));
+		estrellaAnm_->me = translate(estrellaAnm_->me, dvec3(-30, 5 * 2.5, -1 * 20));
 		grObjects.push_back(rectanguloRGB_);
 		grObjects.push_back(caja_);
 		grObjects.push_back(estrellaAnm_);
