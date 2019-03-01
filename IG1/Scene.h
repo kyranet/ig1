@@ -18,10 +18,8 @@ class Scene
 public:
     Scene() { };
 	~Scene();
-    void init(); 
-
+    void init(bool bidimensional = true); 
     void render(Camera const& cam);
-
 	void update();
 	  
 protected:
