@@ -14,8 +14,8 @@ void Scene::init()
     
 
   /*******************_Animacion 2D_**********************/
-  //TrianguloAnimado* triangulo_ = new TrianguloAnimado(30);
-  //Dragon* dragon_ = new Dragon(3000);
+  TrianguloAnimado* triangulo_ = new TrianguloAnimado(30);
+  Dragon* dragon_ = new Dragon(3000);
   /*******************_            _**********************/
 
   // Graphics objects (entities) of the scene
@@ -25,18 +25,15 @@ void Scene::init()
   /*******************_ESCENA 2D_**********************/
   //grObjects.push_back(new Poliespiral(160, 1, 1, 50));
  
-  //grObjects.push_back(new Dragon(3000));
-  //grObjects.push_back(new TrianguloRGB(100));
 
   //OBJETOS QUE SE TRANSLADARAN
   //grObjects.push_back(triangulo_);
- //grObjects.push_back(dragon_);
+  //grObjects.push_back(dragon_);
 
-
- //auto dragon_mat_ = dragon_->getModelMat();
-  //dragon_mat_ = translate(dragon_mat_, { 0.2, 4, 0 });
- //dragon_mat_ = scale(dragon_mat_, { 0.1,0.1, 0.1 });
-  //dragon_->setModelMat(dragon_mat_);
+  /*auto dragon_mat_ = dragon_->getModelMat();
+  dragon_mat_ = translate(dragon_mat_, { 0.2, 4, 0 });
+  dragon_mat_ = scale(dragon_mat_, { 0.1,0.1, 0.1 });
+  dragon_->setModelMat(dragon_mat_);*/
 /*******************_            _**********************/
 
 
@@ -50,11 +47,10 @@ void Scene::init()
   /*******************_            _**********************/
 
   grObjects.push_back(rectanguloRGB_);
+  grObjects.push_back(caja_);
   //grObjects.push_back(estrella3D_);
   grObjects.push_back(estrellaAnm_);
-  grObjects.push_back(caja_);
-
- 
+  
 
  /*******************_            _**********************/
 }
