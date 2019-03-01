@@ -46,6 +46,8 @@ void Scene::init()
   EstrellaAnimada* estrellaAnm_ = new EstrellaAnimada(30, 5, 20);
   /*******************_            _**********************/
 
+  
+  estrellaAnm_->me = translate(estrellaAnm_->me, dvec3(-30, 5 * 2.5, -1 * 20));
   grObjects.push_back(rectanguloRGB_);
   grObjects.push_back(caja_);
   //grObjects.push_back(estrella3D_);
