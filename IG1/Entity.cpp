@@ -116,28 +116,36 @@ void Dragon::render(Camera const& cam)
 //   |___|  |__|  |__||___._|__|__|___  |_____||__||_____|
 //                                |_____|                 
 
-TrianguloRGB::TrianguloRGB(GLdouble r)
-	: Entity()
-{
+TrianguloAnimado::TrianguloAnimado(GLdouble r) {
+
 	mesh = Mesh::generaTrianguloRGB(r);
 }
 
-TrianguloRGB::~TrianguloRGB()
+TrianguloAnimado::~TrianguloAnimado()
 {
 	delete mesh;
 	mesh = nullptr;
 }
 
-void TrianguloRGB::render(Camera const& cam)
+void TrianguloAnimado::update() {
+	alfa_++;
+	beta_ += 0.1;
+}
+
+void TrianguloAnimado::render(Camera const& cam)
 {
-	//glPolygonMode(GL_BACK, GL_LINE);
-	//glPolygonMode(GL_BACK, GL_POINT);
 	if (mesh != nullptr)
 	{
-		uploadMvM(cam.getViewMat());
 		glPointSize(2);
+		//dmat4 modelMatAux = modelMat;
+
+		modelMat = translate(dmat4(1), dvec3(100 * sin(beta_), 100 * cos(beta_), 0.0));
+		modelMat = rotate(modelMat, radians(alfa_), { 0.0, 0.0, 1.0 });
+
+		uploadMvM(cam.getViewMat());
 		mesh->render();
 		glColor3d(0.0, 0.0, 1.0);
+		//modelMat = moelMatAux;
 	}
 }
 
@@ -178,40 +186,55 @@ void RectanguloRGB::render(Camera const& cam)
 // |_______||_____||____|__| |_____||__|__||___._||______|_____/ 
 // 
 
-Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h)
-	: Entity()
-{
+EstrellaAnimada::EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h) {
+
 	mesh = Mesh::generaEstrella3D(re, np, h);
-	modelMat = translate(modelMat, dvec3(-h , re * 2.5 , -1 * h));
-	//modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
+	modelMat = translate(modelMat, dvec3(-h, re * 2.5, -1 * h));
 	
+
 }
 
-Estrella3D::~Estrella3D()
+EstrellaAnimada::~EstrellaAnimada()
 {
 	delete mesh;
 	mesh = nullptr;
 }
 
-void Estrella3D::render(Camera const& cam)
+
+void EstrellaAnimada::update() {
+	alfa_++;
+}
+
+void EstrellaAnimada::render(Camera const& cam)
 {
+
 	if (mesh != nullptr)
 	{
-		
-		glColor3d(0.0, 0.0, 1.0);
+
+		//primero me recoge la traslación en escena
+		//luego en render, la camara debe en el upload.. camara * modelmat, pero antes hay que hacer la traslacion
+		dmat4 modMatAux = dmat4(1.0);
+
+		glColor3d(0.3, 0.5, 1.0);
 		glLineWidth(2);
-		uploadMvM(cam.getViewMat());
+		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
+		
+		uploadMvM(cam.getViewMat() * me);
 		mesh->render();
 
+		
 		modelMat = rotate(modelMat, radians(180.0), dvec3(0, 0, 1));
 
-		
-		glColor3d(0.0, 0.0, 1.0);
+
+		glColor3d(0.3, 0.5, 1.0);
+		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
 		glLineWidth(2);
-		uploadMvM(cam.getViewMat());
+		uploadMvM(cam.getViewMat() * me);
 		mesh->render();
 	}
 }
+
+
 
 //  ______         __        
 // |      |.---.-.|__|.---.-.
@@ -244,93 +267,3 @@ void Caja::render(Camera const& cam)
 		
 	}
 }
-
-
-//Animaciones
-TrianguloAnimado::TrianguloAnimado(GLdouble r) {
-
-	mesh = Mesh::generaTrianguloRGB(r);
-}
-
-TrianguloAnimado::~TrianguloAnimado()
-{
-	delete mesh;
-	mesh = nullptr;
-}
-
-void TrianguloAnimado::update() {
-	alfa_++;
-	beta_ += 0.1;
-}
-
-void TrianguloAnimado::render(Camera const& cam)
-{
-
-	if (mesh != nullptr)
-	{
-		
-		glPointSize(2);
-
-		//dmat4 modelMatAux = modelMat;
-
-		modelMat= translate(dmat4(1), dvec3(100 * sin(beta_), 100 * cos(beta_), 0.0));
-		modelMat = rotate(modelMat, radians(alfa_), { 0.0, 0.0, 1.0 });
-	
-		uploadMvM(cam.getViewMat());
-		mesh->render();
-		glColor3d(0.0, 0.0, 1.0);
-
-		//modelMat = moelMatAux;
-		
-	}
-}
-
-
-//Animaciones
-EstrellaAnimada::EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h) {
-
-	mesh = Mesh::generaEstrella3D(re, np, h);
-	modelMat = translate(modelMat, dvec3(-h, re * 2.5, -1 * h));
-	
-}
-
-EstrellaAnimada::~EstrellaAnimada()
-{
-	delete mesh;
-	mesh = nullptr;
-}
-
-
-void EstrellaAnimada::update() {
-	alfa_++;
-}
-void EstrellaAnimada::render(Camera const& cam)
-{
-
-	if (mesh != nullptr)
-	{
-		modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
-		glColor3d(0.3, 0.5, 1.0);
-		glLineWidth(2);
-		uploadMvM(cam.getViewMat());
-		mesh->render();
-
-		glColor3d(0.3, 0.5, 1.0);
-		glLineWidth(2);
-		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
-		uploadMvM(cam.getViewMat());
-		mesh->render();
-
-		modelMat = rotate(modelMat, radians(180.0), dvec3(0, 0, 1));
-
-
-		
-		glColor3d(0.3, 0.5, 1.0);
-		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
-		glLineWidth(2);
-		uploadMvM(cam.getViewMat());
-		mesh->render();
-		
-	}
-}
-

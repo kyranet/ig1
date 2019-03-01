@@ -130,10 +130,12 @@ public:
 	~EstrellaAnimada();
 	virtual void render(Camera const& cam);
 	virtual void update();
+	
+	glm::dmat4 me = glm::dmat4 (1.0);
 
 private:
 	GLdouble alfa_;
-	Mesh* mesh2_ = nullptr;
+	 
 };
 
 #endif //_H_Entities_H_

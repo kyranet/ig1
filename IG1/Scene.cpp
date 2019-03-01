@@ -42,14 +42,11 @@ void Scene::init(bool bidimensional)
 		/*******************_ANIMACION 3D_**********************/
 		EstrellaAnimada* estrellaAnm_ = new EstrellaAnimada(30, 5, 20);
 
+    estrellaAnm_->me = translate(estrellaAnm_->me, dvec3(-30, 5 * 2.5, -1 * 20));
 		grObjects.push_back(rectanguloRGB_);
 		grObjects.push_back(caja_);
-		//grObjects.push_back(estrella3D_);
 		grObjects.push_back(estrellaAnm_);
 	}
-    
-
-	
 }
 //-------------------------------------------------------------------------
 
