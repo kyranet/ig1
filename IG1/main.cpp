@@ -119,6 +119,10 @@ void key(unsigned char key, int x, int y)
   case 'u':
 	  scene.update();
 	  break;
+  case '3':
+	  scene.~Scene();
+	  scene.init(false);
+	  break;
   default:
 	need_redisplay = false;
     break;
