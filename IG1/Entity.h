@@ -8,8 +8,17 @@
 #include "Camera.h"
 #include "Mesh.h"
 
+#include <string>
 //-------------------------------------------------------------------------
 
+/*
+  _____ _                _____ ______ ____           _____ ______
+ / ____| |        /\    / ____|  ____|  _ \   /\    / ____|  ____|
+| |    | |       /  \  | (___ | |__  | |_) | /  \  | (___ | |__
+| |    | |      / /\ \  \___ \|  __| |  _ < / /\ \  \___ \|  __|
+| |____| |____ / ____ \ ____) | |____| |_) / ____ \ ____) | |____
+ \_____|______/_/    \_\_____/|______|____/_/    \_\_____/|______|
+*/
 class Entity 
 {
 public:
@@ -66,31 +75,11 @@ public:
 
 //-------------------------------------------------------------------------
 
-class TrianguloRGB : public Entity {
-
-public:
-	TrianguloRGB(GLdouble r);
-	~TrianguloRGB();
-	virtual void render(Camera const& cam);
-};
-
-//-------------------------------------------------------------------------
-
 class RectanguloRGB : public Entity {
 
 public:
 	RectanguloRGB(GLdouble w, GLdouble h);
 	~RectanguloRGB();
-	virtual void render(Camera const& cam);
-};
-
-//-------------------------------------------------------------------------
-
-class Estrella3D : public Entity {
-
-public:
-	Estrella3D(GLdouble re, GLdouble np, GLdouble h);
-	~Estrella3D();
 	virtual void render(Camera const& cam);
 };
 
@@ -105,7 +94,7 @@ public:
 };
 
 
-class TrianguloAnimado : public Entity {
+class TrianguloRGB : public Entity {
 
 protected:
 	GLdouble alfa_;
@@ -113,8 +102,8 @@ protected:
 
 
 public:
-	TrianguloAnimado(GLdouble r);
-	~TrianguloAnimado();
+	TrianguloRGB(GLdouble r);
+	~TrianguloRGB();
 	
 	virtual void render(Camera const& cam);
 	virtual void update();
@@ -123,19 +112,48 @@ public:
 
 //-------------------------------------------------------------------------
 
-class EstrellaAnimada : public Entity {
+class Estrella3D: public Entity {
 
 public:
-	EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h);
-	~EstrellaAnimada();
+	Estrella3D(GLdouble re, GLdouble np, GLdouble h);
+	~Estrella3D();
 	virtual void render(Camera const& cam);
 	virtual void update();
 	
+	//Matriz cuadrada
 	glm::dmat4 me = glm::dmat4 (1.0);
 
 private:
+	//variable para la transformación en ejecución según evento
 	GLdouble alfa_;
 	 
+};
+
+// utiliza la clase PixMap32RGBA para el método load
+class Texture
+{
+public:
+	Texture(GLint wrap = GL_REPEAT) : w(0), h(0), id(0) {};
+	~Texture() { if (id != 0) glDeleteTextures(1, &id); };
+	void load(const std::string & BMP_Name, GLubyte alpha = 255);// cargar y transferir a GPU
+	void bind(GLint mode = GL_REPLACE);// para mezcla de colores
+	void unbind() { glBindTexture(GL_TEXTURE_2D, 0); };
+protected:
+	GLuint w, h;// dimensiones de la imagen
+	GLuint id;// identificador interno (GPU) de la textura
+	void init();
+};
+
+
+
+//RECTANGULO TEXCOR
+class RectanguloTexCor : public Entity {
+
+public:
+	RectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh);
+	~RectanguloTexCor();
+
+	virtual void render(Camera const& cam);
 };
 
 #endif //_H_Entities_H_

@@ -1,5 +1,5 @@
 #include "Entity.h"
-
+#include "Pixmap32RGBA.h"
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
 
@@ -116,23 +116,23 @@ void Dragon::render(Camera const& cam)
 //   |___|  |__|  |__||___._|__|__|___  |_____||__||_____|
 //                                |_____|                 
 
-TrianguloAnimado::TrianguloAnimado(GLdouble r) {
+TrianguloRGB::TrianguloRGB(GLdouble r) {
 
 	mesh = Mesh::generaTrianguloRGB(r);
 }
 
-TrianguloAnimado::~TrianguloAnimado()
+TrianguloRGB::~TrianguloRGB()
 {
 	delete mesh;
 	mesh = nullptr;
 }
 
-void TrianguloAnimado::update() {
+void TrianguloRGB::update() {
 	alfa_++;
 	beta_ += 0.1;
 }
 
-void TrianguloAnimado::render(Camera const& cam)
+void TrianguloRGB::render(Camera const& cam)
 {
 	if (mesh != nullptr)
 	{
@@ -186,51 +186,37 @@ void RectanguloRGB::render(Camera const& cam)
 // |_______||_____||____|__| |_____||__|__||___._||______|_____/ 
 // 
 
-EstrellaAnimada::EstrellaAnimada(GLdouble re, GLdouble np, GLdouble h) {
+Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h) {
 
+	setModelMat(translate(mat4(getModelMat()), vec3(re / 2, (re + re / 2), re / 2)));
 	mesh = Mesh::generaEstrella3D(re, np, h);
-	modelMat = translate(modelMat, dvec3(-h, re * 2.5, -1 * h));
 	
-
 }
 
-EstrellaAnimada::~EstrellaAnimada()
+Estrella3D::~Estrella3D()
 {
 	delete mesh;
 	mesh = nullptr;
 }
 
 
-void EstrellaAnimada::update() {
+void Estrella3D::update() {
 	alfa_++;
 }
 
-void EstrellaAnimada::render(Camera const& cam)
+void Estrella3D::render(Camera const& cam)
 {
-
 	if (mesh != nullptr)
 	{
-
-		//primero me recoge la traslación en escena
-		//luego en render, la camara debe en el upload.. camara * modelmat, pero antes hay que hacer la traslacion
-		dmat4 modMatAux = dmat4(1.0);
-
-		glColor3d(0.3, 0.5, 1.0);
+		setModelMat(rotate(modelMat, radians(2.0), dvec3(0, 1, 1)));
 		glLineWidth(2);
-		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
-		
-		uploadMvM(cam.getViewMat() * me);
+		glColor3d(1.0, 0.0, 0.0);
+		glPolygonMode(GL_FRONT, GL_LINE);
+		glPolygonMode(GL_BACK, GL_FILL);
+		uploadMvM(cam.getViewMat());
 		mesh->render();
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		
-		modelMat = rotate(modelMat, radians(180.0), dvec3(0, 0, 1));
-
-
-		glColor3d(0.3, 0.5, 1.0);
-		modelMat = rotate(modelMat, radians(alfa_), dvec3(0, 0, 1));
-		glLineWidth(2);
-		uploadMvM(cam.getViewMat() * me);
-		mesh->render();
 	}
 }
 
@@ -260,10 +246,66 @@ void Caja::render(Camera const& cam)
 {
 	if (mesh != nullptr)
 	{
-		glColor3d(1.0, 0.0, 0.0);	
+		glColor3d(1.0, 1.0, 0.0);	
 		glLineWidth(2);
 		uploadMvM(cam.getViewMat());
 		mesh->render();
 		
+	}
+}
+
+
+//TEXTURE
+
+void Texture::init() {
+	glGenTextures(1, &id);// genera un identificador para una nueva textura
+	glBindTexture(GL_TEXTURE_2D, id);// filters and wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
+void Texture::bind(GLint mode) {  // modo para la mezcla los colores 
+	glBindTexture(GL_TEXTURE_2D, id);// activa  la textura
+	// la función de mezcla de colores no queda guardada en el objeto
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode); // modos: GL_REPLACE, GL_MODULATE, GL_ADD ...
+}
+
+void Texture::load(const std::string & BMP_Name, GLubyte alpha) {
+	if (id == 0) init();
+	PixMap32RGBA pixMap;// var. local para cargar la imagen del archivo
+	pixMap.load_bmp24BGR(BMP_Name);// carga y añade alpha=255
+	// carga correcta? -> exception
+	if (alpha != 255) pixMap.set_alpha(alpha);
+	w = pixMap.width();
+	h = pixMap.height();
+	glBindTexture(GL_TEXTURE_2D, id);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixMap.data());// transferir a GPU
+}
+
+
+
+
+
+RectanguloTexCor::RectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh): Entity()
+{
+	
+}
+
+RectanguloTexCor::~RectanguloTexCor()
+{
+	delete mesh;
+	mesh = nullptr;
+}
+
+void RectanguloTexCor::render(Camera const& cam)
+{
+	if (mesh != nullptr)
+	{
+		uploadMvM(cam.getViewMat());
+		glPointSize(2);
+		mesh->render();
+		glColor3d(0.0, 0.0, 1.0);
 	}
 }

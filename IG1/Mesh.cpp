@@ -28,7 +28,18 @@ void Mesh::render()
   }
 }
 //-------------------------------------------------------------------------
+/*	__  __    _    _     _        _    ____  
+	|  \/  |  / \  | |   | |      / \  / ___| 
+	| |\/| | / _ \ | |   | |     / _ \ \___ \ 
+	| |  | |/ ___ \| |___| |___ / ___ \ ___) |
+	|_|  |_/_/   \_\_____|_____/_/   \_\____/ */
 
+
+	/*	 _   _   _   _
+		/ \ / \ / \ / \
+		(E | J | E | S)
+		 \_ / \_ / \_ / 
+	*/
 Mesh * Mesh::createRGBAxes(GLdouble l)
 {
   Mesh* m = new Mesh();
@@ -59,7 +70,12 @@ Mesh * Mesh::createRGBAxes(GLdouble l)
  
   return m; 
 }
+//-------------------------------------------------------------------------
 
+ /*	  _   _   _   _   _   _   _   _   _   _   _  
+	 / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ 
+	( P | O | L | I | E | S | P | I | R | A | L )
+	 \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ */
 Mesh* Mesh::generaPoliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrAng, GLdouble ladoIni, GLdouble incrLado, GLuint numVert) {
 	Mesh* m = new Mesh();
 	m->primitive = GL_LINE_STRIP;
@@ -90,6 +106,13 @@ Mesh* Mesh::generaPoliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrA
 }
 //-------------------------------------------------------------------------
 
+
+/*
+	  _   _   _   _   _   _  
+	 / \ / \ / \ / \ / \ / \ 
+	( D | R | A | G | O | N )
+	 \_/ \_/ \_/ \_/ \_/ \_/ 
+ */
 Mesh* Mesh::generaDragon(GLuint numVert) {
 	Mesh* m = new Mesh();
 	m->primitive = GL_POINTS;
@@ -115,7 +138,14 @@ Mesh* Mesh::generaDragon(GLuint numVert) {
 	}
 	return m;
 }
+//-------------------------------------------------------------------------
 
+/*
+  _   _   _   _   _   _   _   _   _
+ / \ / \ / \ / \ / \ / \ / \ / \ / \
+( T | R | I | A | N | G | U | L | O )
+ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/
+*/
 Mesh* Mesh::generaTriangulo(GLdouble r) {
 	//genera los tres vértices del triángulo equilátero de radio r, cenrado en el plano=0; primitiva GL_TRIANGLES
 	Mesh* m = new Mesh();
@@ -155,6 +185,14 @@ Mesh* Mesh::generaTrianguloRGB(GLdouble r) {
 	return m;
 }
 
+//-------------------------------------------------------------------------
+
+/*
+  _   _   _   _   _   _   _   _   _   _
+ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
+( R | E | C | T | A | N | G | U | L | O )
+ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/
+*/
 Mesh* Mesh::generaRectangulo(GLdouble w, GLdouble h) {
 	Mesh* m = new Mesh();
 	m->primitive = GL_TRIANGLE_STRIP;
@@ -188,9 +226,19 @@ Mesh* Mesh::generaRectanguloRGB(GLdouble w, GLdouble h) {
 	return m;
 }
 
+//-------------------------------------------------------------------------
+
+/*
+  _   _   _   _   _   _   _   _
+ / \ / \ / \ / \ / \ / \ / \ / \
+( E | S | T | R | E | L | L | A )
+ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/
+
+*/
+
 Mesh* Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
 {
-	Mesh* m = new Mesh();
+	/*Mesh* m = new Mesh();
 	m->primitive = GL_TRIANGLE_FAN;
 	m->numVertices = 2 * np + 2;
 	m->vertices = new dvec3[m->numVertices];
@@ -218,8 +266,47 @@ Mesh* Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
 		m->vertices[i] = { x, he, z };
 	}
 
-	return m;
+	return m;*/
+
+	Mesh* e3D = new Mesh();
+	e3D->primitive = GL_TRIANGLE_FAN;
+	e3D->numVertices = (2 * np + 3) * 2;
+	e3D->vertices = new dvec3[e3D->numVertices];
+	double ri = re / 2;
+	double angIni = 90;
+	double incrAng = 360 / (2 * np);
+	dvec2 centro(0, 0);
+	dvec2 verT(0, 0);
+	e3D->vertices[0] = dvec3(0.0, 0.0, 0.0);
+	for (int ver = 1; ver < (e3D->numVertices) / 2; ver++)
+	{
+		if (ver % 2 != 0)ri = ri / 2;
+		else ri = ri * 2;
+		verT = dvec2(centro.x + ri * cos(radians(angIni)), centro.y + ri * sin(radians(angIni)));
+		angIni += incrAng;
+		e3D->vertices[ver] = dvec3(verT.x, verT.y, -h);
+	}
+	e3D->vertices[((e3D->numVertices) / 2) - 1] = dvec3(0.0, 0.0, 0.0);
+	for (int ver = (e3D->numVertices) / 2; ver < e3D->numVertices; ver++)
+	{
+		if (ver % 2 != 0)ri = ri / 2;
+		else ri = ri * 2;
+		verT = dvec2(centro.x + ri * cos(radians(angIni)), centro.y + ri * sin(radians(angIni)));
+		angIni += incrAng;
+		e3D->vertices[ver] = dvec3(verT.x, verT.y, h);
+	}
+
+	return e3D;
 }
+
+//-------------------------------------------------------------------------
+
+/*
+  _   _   _   _
+ / \ / \ / \ / \
+( C | U | B | O )
+ \_/ \_/ \_/ \_/
+*/
 
 Mesh* Mesh::generaContCubo(GLdouble l)
 {
@@ -242,3 +329,24 @@ Mesh* Mesh::generaContCubo(GLdouble l)
 
 	return m;
 }
+
+//-------------------------------------------------------------------------
+
+//TEXTURAS
+
+Mesh* Mesh::generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh) {
+
+	Mesh* m = generaRectangulo(w, h);
+	m->texCoords = new dvec2(m->numVertices);
+
+
+	m->texCoords[0] = dvec2(0, rh);
+	m->texCoords[1] = dvec2(0, 0);
+	m->texCoords[2] = dvec2(rw, rh);
+	m->texCoords[3] = dvec2(rw, 0);
+
+	return m;
+}
+
+/*que añade coordenadas de textura para cubrir el rectángulo con una
+imagen que se repite rw veces a lo ancho y rh a lo alto. */

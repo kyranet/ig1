@@ -14,37 +14,37 @@ void Scene::init(bool bidimensional)
 
 	grObjects.push_back(new EjesRGB(200.0));
 
+	//escena 2D
 	if (bidimensional)
 	{
 		/*******************_Animacion 2D_**********************/
-		TrianguloAnimado* triangulo_ = new TrianguloAnimado(30);
+		//objetos que se trasladaran una vez creada la escena
+		TrianguloRGB* triangulo_ = new TrianguloRGB(30);
 		Dragon* dragon_ = new Dragon(3000);
 		/*******************_            _**********************/
 
 		// Graphics objects (entities) of the scene
 		grObjects.push_back(new Poliespiral(160, 1, 1, 50));
-
-
-		//OBJETOS QUE SE TRANSLADARAN
 		grObjects.push_back(triangulo_);
 		grObjects.push_back(dragon_);
 
+		//se recoge la matriz identidad para efectuar la transformación
 		auto dragon_mat_ = dragon_->getModelMat();
-		dragon_mat_ = translate(dragon_mat_, { 0.2, 4, 0 });
-		dragon_mat_ = scale(dragon_mat_, { 0.1,0.1, 0.1 });
-		dragon_->setModelMat(dragon_mat_);
+		dragon_mat_ = translate(dragon_mat_, { 0.2, 4, 0 });	//traslación
+		dragon_mat_ = scale(dragon_mat_, { 0.1,0.1, 0.1 });		//escala
+		dragon_->setModelMat(dragon_mat_);						//se aplican los cambios
 	}
+	//si se produce el evento por input: Escena 3D
 	else
 	{
 		RectanguloRGB* rectanguloRGB_ = new RectanguloRGB(400, 200);
-		//Estrella3D* estrella3D_ = new Estrella3D(30, 5, 20);
 		Caja* caja_ = new Caja(40);
 
 		/*******************_ANIMACION 3D_**********************/
-		EstrellaAnimada* estrellaAnm_ = new EstrellaAnimada(30, 5, 20);
+		Estrella3D* estrellaAnm_ = new Estrella3D(30, 6, 20);
 
-		estrellaAnm_->me = translate(estrellaAnm_->me, dvec3(-30, 5 * 2.5, -1 * 20));
-		grObjects.push_back(rectanguloRGB_);
+		// Graphics objects (entities) of the scene
+		grObjects.push_back(rectanguloRGB_);	
 		grObjects.push_back(caja_);
 		grObjects.push_back(estrellaAnm_);
 	}
