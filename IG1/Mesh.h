@@ -27,6 +27,7 @@ public:
 
 	glm::dvec3* getVertices() { return vertices; };  // vertex array
 	glm::dvec4* getColors() { return colors; };      // color array
+	glm::dvec2* getTexCoords() { return texCoords; }; //texturas array
    
 protected:
 

@@ -1,9 +1,11 @@
-#include "Entity.h"
+﻿#include "Entity.h"
 #include "Pixmap32RGBA.h"
 #include <gtc/matrix_transform.hpp>  
 #include <gtc/type_ptr.hpp>
 
 using namespace glm;
+
+const std::string BALDOSAC_ = "..\\Bmps\\baldosaC.bmp";
 
 //-------------------------------------------------------------------------
 
@@ -180,6 +182,53 @@ void RectanguloRGB::render(Camera const& cam)
 	}
 }
 
+/*--------------------------------------------------------*/
+RectanguloTexCor::RectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh) : Entity()
+{
+	
+	mesh = Mesh::generaRectanguloTexCor(w, h, rw, rh);
+	texture_ = new Texture();
+
+	texture_->load(BALDOSAC_);
+	modelMat = rotate(modelMat, radians(90.0), dvec3(1, 0, 0));
+}
+
+RectanguloTexCor::~RectanguloTexCor()
+{
+	delete mesh;
+	mesh = nullptr;
+}
+
+void RectanguloTexCor::update()
+{
+	
+}
+
+
+void RectanguloTexCor::render(Camera const& cam)
+{
+	if (mesh != nullptr)
+	{
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_DOUBLE, 0, mesh->getTexCoords());
+		texture_->bind();
+		
+		glPointSize(2);
+		glColor3d(0.0, 0.0, 1.0);
+
+		uploadMvM(cam.getViewMat());
+		
+		mesh->render();	
+
+		texture_->unbind();
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	}
+}
+
+/*Proporcional:
+textCoords(i, j)=(i/NC, j/NF)*/
+
+
 //  _______         __               __ __         ______ _____  
 // |    ___|.-----.|  |_.----.-----.|  |  |.---.-.|__    |     \ 
 // |    ___||__ --||   _|   _|  -__||  |  ||  _  ||__    |  --  |
@@ -268,14 +317,14 @@ void Texture::init() {
 
 void Texture::bind(GLint mode) {  // modo para la mezcla los colores 
 	glBindTexture(GL_TEXTURE_2D, id);// activa  la textura
-	// la funci�n de mezcla de colores no queda guardada en el objeto
+	// la función de mezcla de colores no queda guardada en el objeto
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, mode); // modos: GL_REPLACE, GL_MODULATE, GL_ADD ...
 }
 
 void Texture::load(const std::string & BMP_Name, GLubyte alpha) {
 	if (id == 0) init();
 	PixMap32RGBA pixMap;// var. local para cargar la imagen del archivo
-	pixMap.load_bmp24BGR(BMP_Name);// carga y a�ade alpha=255
+	pixMap.load_bmp24BGR(BMP_Name);// carga y añade alpha=255
 	// carga correcta? -> exception
 	if (alpha != 255) pixMap.set_alpha(alpha);
 	w = pixMap.width();
@@ -284,28 +333,11 @@ void Texture::load(const std::string & BMP_Name, GLubyte alpha) {
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixMap.data());// transferir a GPU
 }
 
+/*Las formas más habituales de combinar estos colores son:
+ GL_REPLACE. Utilizar exclusivamente la textura: C = T(s,t)
+ GL_MODULATE. Modular ambos colores: C = C * T(s,t)
+ GL_ADD. Sumar ambos colores: C = C + T(s,t)
+ GL_DECAL (para texturas RGBA). C = (1-At).C + At.T(s,t)*/
 
 
 
-
-RectanguloTexCor::RectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh): Entity()
-{
-	
-}
-
-RectanguloTexCor::~RectanguloTexCor()
-{
-	delete mesh;
-	mesh = nullptr;
-}
-
-void RectanguloTexCor::render(Camera const& cam)
-{
-	if (mesh != nullptr)
-	{
-		uploadMvM(cam.getViewMat());
-		glPointSize(2);
-		mesh->render();
-		glColor3d(0.0, 0.0, 1.0);
-	}
-}

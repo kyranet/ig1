@@ -349,4 +349,5 @@ Mesh* Mesh::generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh)
 }
 
 /*que añade coordenadas de textura para cubrir el rectángulo con una
-imagen que se repite rw veces a lo ancho y rh a lo alto. */
+imagen que se repite rw veces a lo ancho y rh a lo alto. 
+*/

@@ -154,6 +154,19 @@ public:
 	~RectanguloTexCor();
 
 	virtual void render(Camera const& cam);
+	virtual void update();
+
+protected:
+	Texture* texture_ = nullptr;
 };
 
 #endif //_H_Entities_H_
+
+
+
+/*Texture Wrapping: qué se hace cuando las coordenadas de textura
+caen fuera del rango [0, 1].
+GL_REPEAT: la textura se repite (tiling). Se ignora la parte entera
+de las coordenadas de textura.
+GL_CLAMP: coordenadas de textura superiores a 1 se ajustan a 1,
+y las coordenadas inferiores a 0 se ajustan a 0.*/
